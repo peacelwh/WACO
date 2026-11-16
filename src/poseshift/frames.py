@@ -131,7 +131,7 @@ class FrameAdapter:
         return a
 
     def action_to_policy(self, action_world) -> np.ndarray:
-        """Inverse of :meth:`action_to_world`, used when relabelling demonstrations."""
+        """Inverse of :meth:`action_to_world`."""
         a = np.asarray(action_world, dtype=float).copy()
         if self.frame == "world":
             return a

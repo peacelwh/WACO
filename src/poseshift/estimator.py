@@ -226,9 +226,11 @@ def arm_anchor(depth, f_px, model_b, T_bc_prior, yaw_grid=(-16, -8, 0, 8, 16),
 
     Only model points that are inside the image and not occluded under the current pose
     hypothesis take part (from this viewpoint the table hides the pedestal and much of the
-    lower arm). Multi-start: base-yaw / base-translation hypotheses around the calibrated
-    prior are ranked by how many model points they explain within 2 cm after a short
-    coarse ICP; the best three are refined with a tightening tolerance.
+    lower arm). Multi-start: 25 base-yaw / base-translation hypotheses around the prior
+    (yaw offsets of -16..16 degrees, planar offsets of 0 and +-8 cm) each run six iterations
+    of trimmed ICP with a 10 cm radius and are ranked by the render-and-compare score; the
+    best few continue for (10, 15, 10) iterations at (5, 2, 1) cm, keeping the best 80 % of
+    the correspondences.
     """
     obs, _ = backproject(depth, f_px, stride=1)
     tree = cKDTree(obs)
@@ -371,9 +373,9 @@ def scene_refine(depth, ref_depth, ref_mask, f_px, dT_c_init, iters=25, n_model=
     with normals. Estimates A = dT_c^{-1} (maps camera^0 points into the current camera
     frame); returns dT_c. Trimmed + Huber-weighted so that objects and the arm, which moved,
     drop out as outliers. The table plane pins z/roll/pitch, walls and furniture pin the rest.
-    Sparse feature matches (`pairs_*`, point-to-point) are added with a large weight: the
-    table dominates the dense term and leaves in-plane sliding weakly constrained, whereas a
-    textured feature pins all three translation directions.
+    The WACO runtime uses this point-to-plane term alone. Optional sparse feature matches
+    (`pairs_*`, point-to-point) can be added with a large weight; they are not passed by
+    the runtime.
     """
     rng = np.random.default_rng(seed)
     if model_pts is not None:          # e.g. a fused multi-view scan, already in the nominal frame
