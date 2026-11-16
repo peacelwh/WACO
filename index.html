@@ -1,0 +1,408 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>WACO — Towards Pose-Robust Few-Shot Vision-Language-Action Models</title>
+<meta name="description" content="WACO is a world-anchored canonicalization framework that makes few-shot vision-language-action policies robust to camera and robot-base shifts without test-time calibration, perturbed training data or architectural change. We also introduce LIBERO-PoseShift, the first benchmark for RGB VLAs with graded camera, base and compound shifts.">
+<meta property="og:title" content="WACO — Towards Pose-Robust Few-Shot Vision-Language-Action Models">
+<meta property="og:description" content="World-anchored canonicalization for VLA models, and the LIBERO-PoseShift benchmark.">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://peacelwh.github.io/WACO/static/img/fig/teaser.png">
+<link rel="icon" href="static/img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="static/css/style.css?v=4">
+<script>document.documentElement.classList.add('js')</script>
+</head>
+<body>
+
+<!-- inline icon sprites -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-github" viewBox="0 0 16 16"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></symbol>
+  <symbol id="i-hf" viewBox="0 0 95 88"><path fill="#FFD21E" d="M47.21 76.5a34.75 34.75 0 1 0 0-69.5 34.75 34.75 0 0 0 0 69.5Z"/><path fill="#FF9D0B" d="M81.96 41.75a34.75 34.75 0 1 0-69.5 0 34.75 34.75 0 0 0 69.5 0Zm-73.5 0a38.75 38.75 0 1 1 77.5 0 38.75 38.75 0 0 1-77.5 0Z"/><path fill="#3A3B45" d="M58.5 32.3c1.28.44 1.78 3.06 3.07 2.38a5 5 0 1 0-6.76-2.07c.61 1.15 2.55-.72 3.7-.32ZM34.95 32.3c-1.28.44-1.79 3.06-3.07 2.38a5 5 0 1 1 6.76-2.07c-.61 1.15-2.56-.72-3.7-.32Z"/><path fill="#FF323D" d="M46.96 56.29c9.83 0 13-8.76 13-13.26 0-2.34-1.57-1.6-4.09-.36-2.33 1.15-5.46 2.74-8.9 2.74-7.19 0-13-6.88-13-2.38s3.16 13.26 13 13.26Z"/><path fill="#3A3B45" fill-rule="evenodd" d="M39.43 54a8.7 8.7 0 0 1 5.3-4.49c.4-.12.81.57 1.24 1.28.4.68.82 1.37 1.24 1.37.45 0 .9-.68 1.33-1.35.45-.7.89-1.38 1.32-1.25a8.61 8.61 0 0 1 5 4.17c3.73-2.94 5.1-7.74 5.1-10.7 0-2.34-1.57-1.6-4.09-.36l-.14.07c-2.31 1.15-5.39 2.67-8.77 2.67s-6.45-1.52-8.77-2.67c-2.6-1.29-4.23-2.1-4.23.29 0 3.05 1.46 8.06 5.47 10.97Z" clip-rule="evenodd"/><path fill="#FF9D0B" d="M70.71 37a3.25 3.25 0 1 0 0-6.5 3.25 3.25 0 0 0 0 6.5ZM24.21 37a3.25 3.25 0 1 0 0-6.5 3.25 3.25 0 0 0 0 6.5ZM17.52 48c-1.62 0-3.06.66-4.07 1.87a5.97 5.97 0 0 0-1.33 3.76 7.1 7.1 0 0 0-1.94-.3c-1.55 0-2.95.59-3.94 1.66a5.8 5.8 0 0 0-.8 7 5.3 5.3 0 0 0-1.79 2.82c-.24.9-.48 2.8.8 4.74a5.22 5.22 0 0 0-.37 5.02c1.02 2.32 3.57 4.14 8.52 6.1 3.07 1.22 5.89 2 5.91 2.01a44.33 44.33 0 0 0 10.93 1.6c5.86 0 10.05-1.8 12.46-5.34 3.88-5.69 3.33-10.9-1.7-15.92-2.77-2.78-4.62-6.87-5-7.77-.78-2.66-2.84-5.62-6.25-5.62a5.7 5.7 0 0 0-4.6 2.46c-1-1.26-1.98-2.25-2.86-2.82A7.4 7.4 0 0 0 17.52 48Zm0 4c.51 0 1.14.22 1.82.65 2.14 1.36 6.25 8.43 7.76 11.18.5.92 1.37 1.31 2.14 1.31 1.55 0 2.75-1.53.15-3.48-3.92-2.93-2.55-7.72-.68-8.01.08-.02.17-.02.24-.02 1.7 0 2.45 2.93 2.45 2.93s2.2 5.52 5.98 9.3c3.77 3.77 3.97 6.8 1.22 10.83-1.88 2.75-5.47 3.58-9.16 3.58-3.81 0-7.73-.9-9.92-1.46-.11-.03-13.45-3.8-11.76-7 .28-.54.75-.76 1.34-.76 2.38 0 6.7 3.54 8.57 3.54.41 0 .7-.17.83-.6.79-2.85-12.06-4.05-10.98-8.17.2-.73.71-1.02 1.44-1.02 3.14 0 10.2 5.53 11.68 5.53.11 0 .2-.03.24-.1.74-1.2.33-2.04-4.9-5.2-5.21-3.16-8.88-5.06-6.8-7.33.24-.26.58-.38 1-.38 3.17 0 10.66 6.82 10.66 6.82s2.02 2.1 3.25 2.1c.28 0 .52-.1.68-.38.86-1.46-8.06-8.22-8.56-11.01-.34-1.9.24-2.85 1.31-2.85Z"/><path fill="#FFD21E" d="M38.6 76.69c2.75-4.04 2.55-7.07-1.22-10.84-3.78-3.77-5.98-9.3-5.98-9.3s-.82-3.2-2.69-2.9c-1.87.3-3.24 5.08.68 8.01 3.91 2.93-.78 4.92-2.29 2.17-1.5-2.75-5.62-9.82-7.76-11.18-2.13-1.35-3.63-.6-3.13 2.2.5 2.79 9.43 9.55 8.56 11-.87 1.47-3.93-1.71-3.93-1.71s-9.57-8.71-11.66-6.44c-2.08 2.27 1.59 4.17 6.8 7.33 5.23 3.16 5.64 4 4.9 5.2-.75 1.2-12.28-8.53-13.36-4.4-1.08 4.11 11.77 5.3 10.98 8.15-.8 2.85-9.06-5.38-10.74-2.18-1.7 3.21 11.65 6.98 11.76 7.01 4.3 1.12 15.25 3.49 19.08-2.12Z"/><path fill="#FF9D0B" d="M77.4 48c1.62 0 3.07.66 4.07 1.87a5.97 5.97 0 0 1 1.33 3.76 7.1 7.1 0 0 1 1.95-.3c1.55 0 2.95.59 3.94 1.66a5.8 5.8 0 0 1 .8 7 5.3 5.3 0 0 1 1.78 2.82c.24.9.48 2.8-.8 4.74a5.22 5.22 0 0 1 .37 5.02c-1.02 2.32-3.57 4.14-8.51 6.1-3.08 1.22-5.9 2-5.92 2.01a44.33 44.33 0 0 1-10.93 1.6c-5.86 0-10.05-1.8-12.46-5.34-3.88-5.69-3.33-10.9 1.7-15.92 2.78-2.78 4.63-6.87 5.01-7.77.78-2.66 2.83-5.62 6.24-5.62a5.7 5.7 0 0 1 4.6 2.46c1-1.26 1.98-2.25 2.87-2.82A7.4 7.4 0 0 1 77.4 48Zm0 4c-.51 0-1.13.22-1.82.65-2.13 1.36-6.25 8.43-7.76 11.18a2.43 2.43 0 0 1-2.14 1.31c-1.54 0-2.75-1.53-.14-3.48 3.91-2.93 2.54-7.72.67-8.01a1.54 1.54 0 0 0-.24-.02c-1.7 0-2.45 2.93-2.45 2.93s-2.2 5.52-5.97 9.3c-3.78 3.77-3.98 6.8-1.22 10.83 1.87 2.75 5.47 3.58 9.15 3.58 3.82 0 7.73-.9 9.93-1.46.1-.03 13.45-3.8 11.76-7-.29-.54-.75-.76-1.34-.76-2.38 0-6.71 3.54-8.57 3.54-.42 0-.71-.17-.83-.6-.8-2.85 12.05-4.05 10.97-8.17-.19-.73-.7-1.02-1.44-1.02-3.14 0-10.2 5.53-11.68 5.53-.1 0-.19-.03-.23-.1-.74-1.2-.34-2.04 4.88-5.2 5.23-3.16 8.9-5.06 6.8-7.33-.23-.26-.57-.38-.98-.38-3.18 0-10.67 6.82-10.67 6.82s-2.02 2.1-3.24 2.1a.74.74 0 0 1-.68-.38c-.87-1.46 8.05-8.22 8.55-11.01.34-1.9-.24-2.85-1.31-2.85Z"/><path fill="#FFD21E" d="M56.33 76.69c-2.75-4.04-2.56-7.07 1.22-10.84 3.77-3.77 5.97-9.3 5.97-9.3s.82-3.2 2.7-2.9c1.86.3 3.23 5.08-.68 8.01-3.92 2.93.78 4.92 2.28 2.17 1.51-2.75 5.63-9.82 7.76-11.18 2.13-1.35 3.64-.6 3.13 2.2-.5 2.79-9.42 9.55-8.55 11 .86 1.47 3.92-1.71 3.92-1.71s9.58-8.71 11.66-6.44c2.08 2.27-1.58 4.17-6.8 7.33-5.23 3.16-5.63 4-4.9 5.2.75 1.2 12.28-8.53 13.36-4.4 1.08 4.11-11.76 5.3-10.97 8.15.8 2.85 9.05-5.38 10.74-2.18 1.69 3.21-11.65 6.98-11.76 7.01-4.31 1.12-15.26 3.49-19.08-2.12Z"/></symbol>
+  <symbol id="i-pdf" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8l-5-5Zm0 0v5h5M9 13h6M9 17h4"/></symbol>
+  <symbol id="i-grid" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" d="M4 4h7v7H4zM13 4h7v7h-7zM4 13h7v7H4zM13 13h7v7h-7z"/></symbol>
+  <symbol id="i-replay" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M3 12a9 9 0 1 0 3-6.7M3 4v5h5"/></symbol>
+</svg>
+
+<!-- ============================== NAV ============================== -->
+<nav class="nav" id="nav">
+  <div class="nav-inner">
+    <a href="#top" class="nav-brand" aria-label="WACO — project home">
+      <img src="static/img/favicon.svg" alt="" class="nav-mark" width="26" height="26">WACO
+    </a>
+    <div class="nav-links" id="navLinks">
+      <a href="#demo">Demo</a>
+      <a href="#paper">Overview</a>
+      <a href="#method">Method</a>
+      <a href="#benchmark">Benchmark</a>
+      <a href="#results">Results</a>
+      <a href="#videos">Videos</a>
+      <a href="#findings">Findings</a>
+      <a href="#citation">Citation</a>
+    </div>
+    <div class="nav-cta">
+      <a class="btn btn-sm btn-grad" href="https://github.com/peacelwh/WACO" target="_blank" rel="noopener"><svg><use href="#i-github"/></svg>Code</a>
+      <button class="nav-toggle" id="navToggle" aria-label="Open menu"><span></span><span></span></button>
+    </div>
+  </div>
+</nav>
+
+<!-- ============================== HERO / DEMO ============================== -->
+<header class="hero" id="top">
+  <div class="hero-bg" aria-hidden="true">
+    <video class="hero-bg-video" src="static/videos/bg_mosaic.mp4" poster="static/videos/bg_mosaic.jpg" muted loop playsinline autoplay preload="auto"></video>
+    <div class="hero-bg-veil"></div>
+    <div class="hero-bg-grid"></div>
+  </div>
+  <div class="hero-inner">
+    <div class="hero-chip"><i></i>World-Anchored Canonicalization</div>
+    <h1 class="hero-title"><span>WACO</span></h1>
+    <p class="hero-sub">Towards <span class="grad-text">Pose-Robust Few-Shot</span> Vision-Language-Action Models</p>
+    <p class="hero-tag">A bumped tripod or a re-docked robot base makes a few-shot VLA reach for the wrong place. WACO recovers both shifts from a single RGB-D frame and maps the observation back to the pose the policy was trained at.</p>
+    <div class="hero-actions">
+      <span class="btn btn-ghost-dark is-disabled" aria-disabled="true" title="The paper link will be added here"><svg><use href="#i-pdf"/></svg>Paper (coming soon)</span>
+      <a class="btn btn-light" href="https://github.com/peacelwh/WACO" target="_blank" rel="noopener"><svg><use href="#i-github"/></svg>Code</a>
+      <a class="btn btn-ghost-dark" href="https://huggingface.co/Bluexxx/WACO-pi05-LIBERO" target="_blank" rel="noopener"><svg><use href="#i-hf"/></svg>Model</a>
+      <a class="btn btn-ghost-dark" href="https://huggingface.co/datasets/Bluexxx/LIBERO-PoseShift" target="_blank" rel="noopener"><svg><use href="#i-hf"/></svg>Dataset</a>
+      <a class="btn btn-ghost-dark" href="#benchmark"><svg><use href="#i-grid"/></svg>Benchmark</a>
+    </div>
+
+    <!-- ===== DEMO: the same policy at the calibration pose and under a base shift ===== -->
+    <div class="demo-wrap" id="demo">
+      <div class="demo-frame">
+        <div class="demo-tabs" id="demoTabs" role="tablist" aria-label="Real-robot task">
+          <button class="demo-tab is-on" data-task="toast" role="tab">Toast into Toaster</button>
+          <button class="demo-tab" data-task="toy" role="tab">Toy on Shelf</button>
+          <button class="demo-tab" data-task="color" role="tab">Color Matching</button>
+          <button class="demo-tab" data-task="lemon" role="tab">Lemon to Basket</button>
+          <div class="demo-meta">
+            <span class="speed-chip">3× speed</span>
+            <button class="demo-tool" id="demoRestart" type="button" title="Play from the beginning"><svg><use href="#i-replay"/></svg>Replay</button>
+          </div>
+        </div>
+        <div class="demo-pair">
+          <div class="demo-cell">
+            <video id="demoA" src="static/videos/real/toast_nominal.mp4" poster="static/videos/real/toast_nominal.jpg" muted loop playsinline autoplay preload="auto"></video>
+            <span class="vid-label"><i></i>WACO · calibration pose</span>
+          </div>
+          <div class="demo-cell">
+            <video id="demoB" src="static/videos/real/toast_base.mp4" poster="static/videos/real/toast_base.jpg" muted loop playsinline autoplay preload="auto"></video>
+            <span class="vid-label shift"><i></i>WACO · base shift (10 cm)</span>
+            <span class="vid-note">Table and camera moved 8 cm left and 6 cm forward, away from the arm.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main>
+
+<!-- ============================== PAPER / ABSTRACT ============================== -->
+<section class="section paper" id="paper">
+  <div class="wrap">
+    <div class="authors">
+      <h2 class="paper-title">Towards Pose-Robust Few-Shot Vision-Language-Action Models</h2>
+      <p class="author-list">
+        <span>Wenhao Li<sup>1,2</sup></span>
+        <span>Xuening Zhang<sup>3</sup></span>
+        <span>Yuhao Wei<sup>4,2</sup></span>
+        <span>Zhongyi Han<sup>1</sup></span>
+        <span>Pu Wang<sup>1,2</sup></span>
+        <span>Yuze Wang<sup>3,2</sup></span>
+        <span>Jingkai Wang<sup>5</sup></span>
+        <span>Yilong Yin<sup>1</sup></span>
+      </p>
+      <div class="affils" aria-label="Author affiliations">
+        <span class="affil" title="Shandong University"><sup>1</sup><img src="static/img/logos/sdu.png" alt="Shandong University" class="logo-sdu" width="515" height="160"></span>
+        <span class="affil" title="Shenzhen Loop Area Institute"><sup>2</sup><img src="static/img/logos/szlai.png" alt="Shenzhen Loop Area Institute" class="logo-szlai" width="760" height="121"></span>
+        <span class="affil" title="Harbin Institute of Technology, Shenzhen"><sup>3</sup><img src="static/img/logos/hitsz.png" alt="Harbin Institute of Technology, Shenzhen" class="logo-hitsz" width="868" height="160"></span>
+        <span class="affil" title="Xidian University"><sup>4</sup><img src="static/img/logos/xidian.png" alt="Xidian University" class="logo-xidian" width="446" height="121"></span>
+        <span class="affil" title="Fudan University"><sup>5</sup><img src="static/img/logos/fudan.png" alt="Fudan University" class="logo-fudan" width="436" height="141"></span>
+      </div>
+      <p class="affil-names"><sup>1</sup>Shandong University &nbsp;·&nbsp; <sup>2</sup>Shenzhen Loop Area Institute &nbsp;·&nbsp; <sup>3</sup>Harbin Institute of Technology, Shenzhen &nbsp;·&nbsp; <sup>4</sup>Xidian University &nbsp;·&nbsp; <sup>5</sup>Fudan University</p>
+    </div>
+
+    <div class="abstract reveal">
+      <div class="abstract-head">
+        <div class="eyebrow"><i class="px"></i><span>Abstract</span></div>
+        <h2 class="h2">A bumped camera and a re-docked robot are <span class="grad-text">one phenomenon</span>.</h2>
+      </div>
+      <p>Fine-tuning a vision-language-action (VLA) model on a few dozen demonstrations is the standard way to put a manipulation policy on a robot, yet the resulting policy silently assumes that the camera and the robot base stay exactly where they were during data collection: a bumped tripod or a base re-docked a few centimetres away makes it reach for the wrong place. We show that both failures are one phenomenon, a change of the camera-to-base extrinsic that the policy has memorised, and that the robot carries everything needed to undo it. We introduce WACO, a world-anchored canonicalization framework for VLA models: the arm, placed by forward kinematics at the measured joint angles, serves as a metric calibration target, and the static scene serves as the world anchor that tells a moved camera from a moved robot. From a single RGB-D frame, WACO estimates both shifts without ground-truth extrinsics or extra data, canonicalises the image to the calibration viewpoint and the state, action and start pose to the calibration base frame, and fine-tunes the unmodified policy under the artefacts of its own estimator. We also introduce LIBERO-PoseShift, the first benchmark for RGB VLAs with graded camera, base and compound shifts. Across LIBERO-PoseShift, the LIBERO-Plus camera track and four real-world tasks on a UR5e robot, WACO consistently outperforms the standard few-shot recipe and prior viewpoint-robust methods, raising shifted success by 13.2 points in simulation and by 36.7 points on the real robot, recovering 90% of the simulation gap to a ground-truth oracle and 87% of the real-robot gap, and establishing a new state of the art among methods that use no perturbed training data, with no test-time calibration.</p>
+    </div>
+
+    <figure class="fig-card reveal" id="overview">
+      <img src="static/img/fig/teaser.png" width="1980" height="790" alt="Overview: a few-shot fine-tuned VLA misses the target after a pose shift; WACO estimates the shift and restores the training view" loading="lazy" data-zoom>
+      <figcaption><b>Overview.</b> A few-shot fine-tuned VLA memorises the camera-to-base extrinsic of its demonstrations and misses the target once the camera is bumped or the robot is re-docked (left: our UR5e setup at the calibration pose and after the table and camera were moved 10&nbsp;cm away from the robot). WACO estimates both shifts from a single RGB-D frame, with the arm placed by forward kinematics as the metric anchor and the static scene as the world anchor, and canonicalises the observation back to the calibration viewpoint and base frame, so that an unmodified π<sub>0.5</sub> sees the world it was trained in.</figcaption>
+    </figure>
+  </div>
+</section>
+
+<!-- ============================== METHOD ============================== -->
+<section class="section soft" id="method">
+  <div class="wrap">
+    <div class="sec-head center reveal">
+      <div class="eyebrow"><i class="px"></i><span>01 — Method</span></div>
+      <h2 class="h2">Recover the shift, then <span class="grad-text">map the observation back</span>.</h2>
+      <p class="lead">Instead of asking the policy to learn to generalise across poses from data, WACO recovers the shifts from what the robot already knows and maps the observation back to the pose it was trained at. The policy architecture is untouched, and a base shift is reduced to “the object is elsewhere on the table”, a variation the demonstrations already cover.</p>
+    </div>
+
+    <div class="obs-row reveal">
+      <div class="obs"><b>Both shifts are one quantity.</b><span>Each changes the camera-to-base extrinsic, and a base shift also moves the objects in the base frame.</span><span class="eq">T<sub>bc</sub> = ΔT<sub>b</sub><sup>−1</sup> · T<sub>bc</sub><sup>0</sup> · ΔT<sub>c</sub></span></div>
+      <div class="obs"><b>The arm is its own calibration target.</b><span>Forward kinematics at the measured joint angles places every link in the base frame, so the visible arm pins down the extrinsic from a single RGB-D frame, without a checkerboard and without training.</span></div>
+      <div class="obs"><b>The arm alone is not enough.</b><span>Every camera and base shift with the same extrinsic renders the arm identically yet demands different actions; the static scene provides the missing world anchor for free.</span></div>
+    </div>
+
+    <figure class="fig-card reveal" style="margin-top:0">
+      <img src="static/img/fig/overview.png" width="1980" height="709" alt="Model pipeline of WACO" loading="lazy" data-zoom>
+      <figcaption><b>Model pipeline.</b> WACO wraps an unmodified π<sub>0.5</sub>. At reset, a training-free front end registers the FK-placed arm model to the observed depth (<i>arm anchor</i>) and matches the static scene to an empty-workspace reference (<i>world anchor</i>); their fusion yields both shifts and an out-of-plane residual that gates the estimate. Channel A warps the image with the camera shift only; channel B re-expresses state, action and start pose with the base shift only. The policy is fine-tuned once on the canonicaliser's own artefacts.</figcaption>
+    </figure>
+
+    <div class="cards3">
+      <div class="card reveal"><div class="k">1</div><h3 class="h3">Two-anchor shift estimation</h3><p>The arm anchor registers the FK-placed arm cloud to the observed depth and yields the extrinsic metrically, with no learned component. The world anchor matches the live frame to an empty-workspace reference and recovers the camera shift independently of the robot. Fusion gives the base shift in closed form; a base cannot leave the floor, so an out-of-plane residual above 2&nbsp;cm or 2° means that an anchor has failed, and the episode then runs without canonicalisation.</p></div>
+      <div class="card reveal"><div class="k">2</div><h3 class="h3">Channel-separated canonicalization</h3><p><b>Channel A</b> forward-splats the third-person image to the calibration camera with the camera shift alone; disocclusions are never hallucinated and the wrist image is never warped. <b>Channel B</b> maps the reported end-effector pose into the nominal base frame, rotates the policy's deltas back before execution (exact, no first-order approximation), and homes the end effector to the start pose of the demonstrations.</p></div>
+      <div class="card reveal"><div class="k">3</div><h3 class="h3">Error-aware fine-tuning</h3><p>A policy fine-tuned on pristine demonstrations has never seen a splatted image or a slightly-off state. With probability 0.5 each, a training frame is splatted to a random virtual camera and back with a shift perturbed by the estimator's error model, and the state receives a planar base-shift error. Action labels are unchanged, the flow-matching objective is unchanged, and no token, head or parameter is added.</p></div>
+    </div>
+
+    <figure class="fig-card reveal">
+      <img src="static/img/fig/mod_estimator.png" width="1980" height="659" alt="Two-anchor estimation" loading="lazy" data-zoom>
+      <figcaption><b>Two-anchor estimation.</b> (a) Arm anchor: the visible part of the FK-placed arm cloud is registered to the observed depth by trimmed ICP and ranked by a render-and-compare score. (b) World anchor: the live frame is registered to the empty-workspace reference by SIFT, 3D RANSAC and point-to-plane ICP. (c) Fusion closes the extrinsic equation; the discarded height, roll and pitch of the base shift form a ground-truth-free consistency check.</figcaption>
+    </figure>
+  </div>
+</section>
+
+<!-- ============================== BENCHMARK ============================== -->
+<section class="section" id="benchmark">
+  <div class="wrap">
+    <div class="sec-head center reveal">
+      <div class="eyebrow"><i class="px"></i><span>02 — Benchmark</span></div>
+      <h2 class="h2">LIBERO-PoseShift: graded <span class="grad-text">camera, base and compound</span> shifts.</h2>
+      <p class="lead">LIBERO-PoseShift extends LIBERO, whose tasks come with 50 demonstrations collected from one camera pose and one base pose, with a deterministic perturbation layer on its robosuite/MuJoCo environment, so that all methods see identical scenes. State and actions follow a base-frame protocol in which a moved robot reports the pose it <i>believes</i> it has, exactly as hardware does.</p>
+    </div>
+
+    <div class="explorer reveal" id="explorer">
+      <div class="exp-ctl">
+        <div class="ctl-group">
+          <div class="ctl-label">Task</div>
+          <div class="seg" id="expTask"></div>
+        </div>
+        <div class="ctl-group">
+          <div class="ctl-label">Shift kind</div>
+          <div class="seg" id="expKind">
+            <button data-kind="cam" class="is-on">Camera</button>
+            <button data-kind="base">Base</button>
+            <button data-kind="both">Both</button>
+          </div>
+        </div>
+        <div class="ctl-group">
+          <div class="ctl-label">Level</div>
+          <div class="level-track">
+            <input type="range" id="expLevel" min="0" max="3" step="1" value="3" aria-label="Shift level">
+          </div>
+          <div class="level-ticks"><span>Clean</span><span>L1</span><span>L2</span><span>L3</span></div>
+        </div>
+        <div class="cond-card" aria-live="polite">
+          <h4 id="condTitle">Camera shift · L3</h4>
+          <p id="condText"></p>
+          <dl class="cond-kv" id="condKv"></dl>
+        </div>
+      </div>
+      <div class="exp-stage">
+        <div class="exp-cell">
+          <video id="expRef" muted loop playsinline autoplay preload="metadata"></video>
+          <span class="vid-label"><i></i>Calibration pose</span>
+        </div>
+        <div class="exp-cell">
+          <video id="expVid" muted loop playsinline autoplay preload="metadata"></video>
+          <span class="vid-label cam" id="expLabel"><i></i>Camera shift · L3</span>
+        </div>
+        <div class="topview">
+          <svg id="topView" viewBox="0 0 210 120" role="img" aria-label="Top view of the sampled shift"></svg>
+          <p id="topText"></p>
+        </div>
+        <p class="exp-cap">Third-person observation of the same episode at the calibration pose and under the selected shift, as sampled by the benchmark (policy: the standard few-shot recipe, no canonicalisation; rollouts in real time). The shift of every task, episode, kind and level is fixed by the benchmark's deterministic sampler.</p>
+      </div>
+    </div>
+
+    <div class="two-col">
+      <div class="reveal">
+        <div class="tbl-wrap">
+          <table class="tbl">
+            <thead><tr><th>Level</th><th>Camera trans.</th><th>Camera rot. / axis</th><th>Base trans.</th><th>Base yaw</th><th>px (t / yaw)</th></tr></thead>
+            <tbody>
+              <tr><td>L1</td><td>≤ 2 cm</td><td>± 3°</td><td>≤ 2 cm</td><td>± 3°</td><td>6 / 12</td></tr>
+              <tr><td>L2</td><td>≤ 5 cm</td><td>± 5°</td><td>≤ 5 cm</td><td>± 8°</td><td>15 / 21</td></tr>
+              <tr><td>L3</td><td>≤ 10 cm</td><td>± 10°</td><td>≤ 10 cm</td><td>± 15°</td><td>31 / 42</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="tbl-note"><b>Perturbation levels.</b> Camera translations are uniform in a ball and base translations in a disc, both between half and the full radius; rotations are uniform per axis. Last column: displacement of a target object in the 256² third-person view for the largest translation / yaw.</p>
+      </div>
+      <div class="reveal">
+        <div class="obs" style="margin-bottom:16px"><b>Three kinds, three levels.</b><span><i>Camera</i> shifts rotate and translate the third-person camera; <i>base</i> shifts move the robot in the floor plane and rotate it about the vertical, leaving table, objects and third-person camera fixed; <i>both</i> applies the two independently.</span></div>
+        <div class="obs" style="margin-bottom:16px;border-color:var(--c-base)"><b>Base-frame protocol.</b><span>LIBERO expresses state and actions in the world frame, which hands a moved robot the correct target for free. A real robot has no world frame, so the benchmark anchors state and actions at the calibration base pose.</span></div>
+        <div class="obs" style="border-color:var(--teal)"><b>The main grid.</b><span>LIBERO-Spatial and LIBERO-10 × 10 tasks × 10 conditions (clean plus three kinds at three levels) × 10 episodes: 2,000 episodes per model.</span></div>
+      </div>
+    </div>
+
+    <figure class="fig-card reveal">
+      <img src="static/img/fig/bench_grid.png" width="1980" height="749" alt="LIBERO-PoseShift observations" loading="lazy" data-zoom>
+      <figcaption><b>LIBERO-PoseShift observations.</b> Episode 0 of a LIBERO-Spatial task and of a LIBERO-10 task: third-person and wrist views at the calibration pose, and the third-person view with the wrist view inset under camera, base and compound shifts of level 1–3. Yellow: outline of the calibration view. A camera shift displaces the whole third-person image and leaves the wrist view untouched; a base shift leaves the scene of the third-person image in place, moves the arm in it and changes the wrist view.</figcaption>
+    </figure>
+  </div>
+</section>
+
+<!-- ============================== RESULTS ============================== -->
+<section class="section soft" id="results">
+  <div class="wrap">
+    <div class="sec-head center reveal">
+      <div class="eyebrow"><i class="px"></i><span>03 — Results</span></div>
+      <h2 class="h2">The standard recipe is fragile; <span class="grad-text">WACO stays near the oracle</span>.</h2>
+      <p class="lead">Across LIBERO-PoseShift, the LIBERO-Plus camera track and four real-world tasks on a UR5e robot, WACO consistently outperforms the standard few-shot recipe, and its margin grows with the size of the shift.</p>
+    </div>
+
+    <div class="stats reveal">
+      <div class="stat"><div class="v">+13.2<small>pts</small></div><div class="l">shifted success on <b>LIBERO-PoseShift</b> over the standard few-shot recipe (74.0 → 87.2%)</div></div>
+      <div class="stat"><div class="v">+36.7<small>pts</small></div><div class="l">shifted success on a <b>real UR5e</b>, four tasks (43.3 → 80.0%)</div></div>
+      <div class="stat"><div class="v">90<small>%</small></div><div class="l">of the simulation gap to a <b>ground-truth oracle</b> recovered, and 87% of the real-robot gap</div></div>
+      <div class="stat"><div class="v">93.7<small>%</small></div><div class="l">on the <b>LIBERO-Plus camera track</b> (92.4% over three seeds), with no perturbed training data</div></div>
+    </div>
+
+    <!-- chart: success vs shift level, one panel per kind -->
+    <div class="viz-root reveal" id="vizShift" data-palette="#2a78d6,#eb6834,#1baf7a">
+      <div class="viz-head">
+        <div>
+          <h3 class="viz-title">Success under growing pose shifts</h3>
+          <p class="viz-sub">LIBERO-PoseShift (LIBERO-Spatial and LIBERO-10, 200 episodes per point, base-frame protocol). All learned policies share checkpoint, demonstrations and budget.</p>
+        </div>
+        <div class="viz-tools"><button class="viz-btn" id="vizTableBtn" aria-pressed="false">View as table</button></div>
+      </div>
+      <div class="legend" aria-label="Series">
+        <span class="lg-waco"><i></i>WACO (W1 + runtime)</span>
+        <span class="lg-rt"><i></i>WACO runtime on B1</span>
+        <span class="lg-b1"><i></i>B1 (official few-shot recipe)</span>
+        <span class="lg-ref"><i class="dash"></i>GT oracle on W1 (upper bound)</span>
+      </div>
+      <div class="panels" id="vizPanels" style="position:relative"></div>
+      <div class="viz-table tbl-wrap" id="vizTable"></div>
+      <p class="viz-foot">Success rate in %. Differences below two points lie within the Wilson 95% intervals and are not interpreted.</p>
+
+      <div class="gap-viz">
+        <h3 class="viz-title">How much of the gap to the oracle is recovered</h3>
+        <p class="viz-sub">Average success over the shifted conditions: the standard recipe, WACO, and the ground-truth oracle that canonicalises with the true shifts.</p>
+        <div id="gapRows" style="margin-top:8px"></div>
+      </div>
+    </div>
+
+    <div class="tabs reveal" id="resTabs" role="tablist">
+      <button class="tab is-on" data-pane="pane-main" role="tab">LIBERO-PoseShift</button>
+      <button class="tab" data-pane="pane-lp" role="tab">LIBERO-Plus camera track</button>
+      <button class="tab" data-pane="pane-real" role="tab">Real robot</button>
+      <button class="tab" data-pane="pane-few" role="tab">Few-shot scaling</button>
+      <button class="tab" data-pane="pane-abl" role="tab">Ablations</button>
+    </div>
+    <div class="tabpane is-on" id="pane-main"><div class="tbl-wrap" id="tblMain"></div><p class="tbl-note"><b>Pose-shift robustness on LIBERO-PoseShift</b> (LIBERO-Spatial and LIBERO-10, 200 episodes per cell, base-frame protocol). Base / camera gauge: the arm's pose change read as a camera / base shift. † Upper bound with ground-truth poses. Avg is the mean over the nine shifted conditions.</p></div>
+    <div class="tabpane" id="pane-lp"><div class="tbl-wrap" id="tblLp"></div><p class="tbl-note"><b>LIBERO-Plus camera track</b> (1,599 tasks, one episode each). <i>Released</i>: the benchmark's prompts, which append the variant's parameters; <i>corrected</i>: the task's own instruction. Evaluation seed 0 / mean over three evaluation seeds. The WACO runtime alone lifts the public checkpoint to 89.4% without retraining or extrinsics.</p></div>
+    <div class="tabpane" id="pane-real"><div class="tbl-wrap" id="tblReal"></div><p class="tbl-note"><b>Real-robot results</b> (UR5e, success rate in %, 20 trials per task and condition, averaged over the four tasks). Avg is the mean over the three shifted conditions; † uses the re-calibrated ground-truth shifts and is an upper bound.</p>
+      <figure class="fig-card" style="max-width:720px"><img src="static/img/fig/res_realrobot.png" width="895" height="476" alt="Real-robot per-task performance" loading="lazy" data-zoom><figcaption><b>Real-robot per-task performance.</b> Success under pose shifts (mean of the camera, base and compound conditions) on the four UR5e tasks. WACO improves every task, most on Toy on Shelf (+46.7 points).</figcaption></figure></div>
+    <div class="tabpane" id="pane-few"><div class="tbl-wrap" id="tblFew"></div><p class="tbl-note"><b>Few-shot scaling</b>: average shifted success (nine conditions) on LIBERO-Spatial and LIBERO-10 with the first 10, 20 or all 50 demonstrations per task, same recipe and budget. WACO with 10 demonstrations (82.4%) exceeds the standard recipe with 50 (74.0%).</p>
+      <figure class="fig-card"><img src="static/img/fig/res_fewshot.png" width="1910" height="459" alt="Few-shot scaling" loading="lazy" data-zoom><figcaption><b>Few-shot scaling.</b> The gap between WACO and the standard recipe widens as data shrinks, because the pose variation that the recipe must absorb from data is removed analytically; both the runtime and the error-aware training contribute, and their combination is better than either.</figcaption></figure></div>
+    <div class="tabpane" id="pane-abl"><div class="tbl-wrap" id="tblAbl"></div><p class="tbl-note"><b>Ablations.</b> Each block changes one component of the full method on LIBERO-Spatial and LIBERO-10. Avg is the mean over the nine shifted conditions.</p></div>
+  </div>
+</section>
+
+<!-- ============================== VIDEOS ============================== -->
+<section class="section" id="videos">
+  <div class="wrap">
+    <div class="sec-head center reveal">
+      <div class="eyebrow"><i class="px"></i><span>04 — Videos</span></div>
+      <h2 class="h2">In simulation and <span class="grad-text">on a real UR5e</span>.</h2>
+      <p class="lead">All clips are played at 3× speed.</p>
+    </div>
+
+    <div class="vid-block reveal">
+      <div class="vid-head"><h3>Simulation · LIBERO-PoseShift, level 3</h3><span class="pill">3× speed</span><p>The same episode and the same shift: the standard few-shot recipe on the shifted view, and WACO on the view it canonicalises for the policy.</p></div>
+      <div class="sim-grid" id="simGrid"></div>
+    </div>
+
+    <div class="vid-block reveal">
+      <div class="vid-head"><h3>Real robot · UR5e, four tasks</h3><span class="pill">3× speed</span><p>WACO on all four tasks: one uncut trial at the calibration pose and one under the base shift, in which the table and the tripod have been moved together 8&nbsp;cm to the left and 6&nbsp;cm forward, away from the arm.</p></div>
+      <div class="row-label">Calibration pose</div>
+      <div class="real-grid" id="realNominal"></div>
+      <div class="row-label">Base shift · 10 cm</div>
+      <div class="real-grid" id="realBase"></div>
+    </div>
+
+    <figure class="fig-card reveal">
+      <img src="static/img/fig/hw_tasks.png" width="1986" height="288" alt="The four real-robot tasks" loading="lazy" data-zoom>
+      <figcaption><b>Real-robot tasks.</b> The four tabletop tasks form an increasing difficulty ladder: Lemon to Basket needs only coarse localisation; Color Matching adds an instruction-dependent referent and a cup opening only slightly wider than the block; Toy on Shelf requires carrying the toy over the shelf's wire frame and releasing it on the elevated upper tier; Toast into Toaster requires an insertion whose clearance is far below the object size.</figcaption>
+    </figure>
+  </div>
+</section>
+
+<!-- ============================== FINDINGS ============================== -->
+<section class="section soft" id="findings">
+  <div class="wrap">
+    <div class="sec-head center reveal">
+      <div class="eyebrow"><i class="px"></i><span>05 — Findings</span></div>
+      <h2 class="h2">What we found.</h2>
+    </div>
+    <div class="find-grid">
+      <div class="find reveal"><div class="n">01</div><h3>The standard recipe is fragile.</h3><p>The official few-shot recipe loses 17.0 points at camera L3, 21.5 at base L3 and 40.0 at compound L3, and a 2D augmentation recovers part of the camera axis only. Base shifts, which no prior benchmark measures, are the harder half of the problem even for the best policy.</p></div>
+      <div class="find reveal"><div class="n">02</div><h3>Data alone is not enough.</h3><p>A policy trained on exactly WACO's augmented samples but run without canonicalisation gains 7.1 points over the standard recipe, yet stays 6.1 behind WACO, because the policy cannot undo a shift it never observes explicitly.</p></div>
+      <div class="find reveal"><div class="n">03</div><h3>Estimation plus error-aware training closes the loop.</h3><p>The runtime alone already recovers 82% of the gap to the standard recipe's own oracle, and with error-aware training WACO reaches 87.2%, 13.2 points above the standard recipe and within 1.5 points of its own oracle, with a clean score not below the standard recipe's.</p></div>
+      <div class="find reveal"><div class="n">04</div><h3>Both anchors are needed.</h3><p>The single-anchor gauges fail as the gauge ambiguity predicts: the base gauge under base shifts (base L3: 56.0 vs. 86.5 for WACO), and both gauges at camera L3 (64.0). Only the two-anchor estimate handles the compound condition (both L3: 79.0 vs. 46.0 and 49.0).</p></div>
+      <div class="find reveal"><div class="n">05</div><h3>The advantage grows where demonstrations are scarcest.</h3><p>The gain over the standard recipe grows from 13.2 points with 50 demonstrations per task to 15.7 with 20 and 19.2 with 10, so that WACO with 10 demonstrations (82.4%) exceeds the standard recipe with 50 (74.0%).</p></div>
+      <div class="find reveal"><div class="n">06</div><h3>From simulation to a real robot.</h3><p>On the UR5e, WACO raises the average shifted success from 43% to 80%, improves every task under every condition, and comes within 5.4 points of the ground-truth oracle. The front end runs once per trial in about 0.8&nbsp;s on the robot's CPU and recovers the real shifts with median errors of 2.8&nbsp;mm and 0.3° for the camera and 3.8&nbsp;mm and 0.4° for the base.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================== CITATION ============================== -->
+<section class="section" id="citation">
+  <div class="wrap narrow">
+    <div class="sec-head center">
+      <div class="eyebrow"><i class="px"></i><span>Citation</span></div>
+      <h2 class="h2">BibTeX</h2>
+    </div>
+    <div class="bib">
+      <button class="bib-copy" id="bibCopy">Copy</button>
+<pre id="bibText">@article{li2026waco,
+  title   = {Towards Pose-Robust Few-Shot Vision-Language-Action Models},
+  author  = {Li, Wenhao and Zhang, Xuening and Wei, Yuhao and Han, Zhongyi and Wang, Pu and Wang, Yuze and Wang, Jingkai and Yin, Yilong},
+  journal = {arXiv preprint},
+  year    = {2026}
+}</pre>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer class="footer">
+  <div class="wrap">
+    <div class="foot-inner">
+      <div class="foot-brand">
+        <b>WACO</b>
+        <p>World-anchored canonicalization for pose-robust few-shot vision-language-action models.</p>
+      </div>
+      <div class="foot-links">
+        <a class="btn btn-sm btn-ghost-dark" href="https://github.com/peacelwh/WACO" target="_blank" rel="noopener"><svg><use href="#i-github"/></svg>Code</a>
+        <a class="btn btn-sm btn-ghost-dark" href="https://huggingface.co/Bluexxx/WACO-pi05-LIBERO" target="_blank" rel="noopener"><svg><use href="#i-hf"/></svg>Model</a>
+        <a class="btn btn-sm btn-ghost-dark" href="https://huggingface.co/datasets/Bluexxx/LIBERO-PoseShift" target="_blank" rel="noopener"><svg><use href="#i-hf"/></svg>Dataset</a>
+      </div>
+    </div>
+    <p class="foot-note">Shandong University · Shenzhen Loop Area Institute · Harbin Institute of Technology, Shenzhen · Xidian University · Fudan University. Built on <a href="https://github.com/huggingface/lerobot" target="_blank" rel="noopener">LeRobot</a>, π<sub>0.5</sub>, <a href="https://github.com/Lifelong-Robot-Learning/LIBERO" target="_blank" rel="noopener">LIBERO</a> and LIBERO-Plus.</p>
+  </div>
+</footer>
+
+<div class="lightbox" id="lightbox" aria-hidden="true"><img alt=""></div>
+<div class="chart-tip" id="chartTip" role="status"></div>
+
+<script src="static/js/data.js?v=3"></script>
+<script src="static/js/main.js?v=3"></script>
+</body>
+</html>
