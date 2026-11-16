@@ -1,0 +1,4 @@
+level,camera translation,camera rotation / axis,base translation,base yaw,px (translation / yaw)
+L1,<= 2 cm,+-3 deg,<= 2 cm,+-3 deg,6 / 12
+L2,<= 5 cm,+-5 deg,<= 5 cm,+-8 deg,15 / 21
+L3,<= 10 cm,+-10 deg,<= 10 cm,+-15 deg,31 / 42

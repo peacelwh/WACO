@@ -1,0 +1,18 @@
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.ruff_cache/
+.DS_Store
+.idea/
+.vscode/
+
+# downloaded or generated assets
+data/calib_libero/
+data/calib_liberoplus/
+data/depth_dav2_128.npy
+data/depth_dav2_128.json
+data/.cache/
+outputs/
+logs/
+wandb/

@@ -1,0 +1,26 @@
+method,condition,Lemon to Basket,Color Matching,Toy on Shelf,Toast into Toaster,Mean
+pi0.5 (B1),Nominal,95,95,90,90,92.5
+pi0.5 (B1),Camera,80,65,50,45,60.0
+pi0.5 (B1),Base,60,45,30,25,40.0
+pi0.5 (B1),Both,50,35,20,15,30.0
+pi0.5 (B1),Mean (shifted),63.3,48.3,33.3,28.3,43.3
+B1 + 2D aug,Nominal,95,95,95,90,93.8
+B1 + 2D aug,Camera,90,80,65,55,72.5
+B1 + 2D aug,Base,65,50,30,25,42.5
+B1 + 2D aug,Both,55,40,20,15,32.5
+B1 + 2D aug,Mean (shifted),70.0,56.7,38.3,31.7,49.2
+WACO runtime on B1,Nominal,95,90,90,90,91.3
+WACO runtime on B1,Camera,90,80,70,60,75.0
+WACO runtime on B1,Base,85,75,70,60,72.5
+WACO runtime on B1,Both,80,70,55,45,62.5
+WACO runtime on B1,Mean (shifted),85.0,75.0,65.0,55.0,70.0
+WACO (W1 + runtime),Nominal,95,95,95,95,95.0
+WACO (W1 + runtime),Camera,95,90,85,70,85.0
+WACO (W1 + runtime),Base,90,85,80,65,80.0
+WACO (W1 + runtime),Both,85,80,75,60,75.0
+WACO (W1 + runtime),Mean (shifted),90.0,85.0,80.0,65.0,80.0
+GT oracle on W1 (upper bound),Nominal,95,95,95,95,95.0
+GT oracle on W1 (upper bound),Camera,95,90,90,75,87.5
+GT oracle on W1 (upper bound),Base,95,90,85,75,86.3
+GT oracle on W1 (upper bound),Both,90,85,80,75,82.5
+GT oracle on W1 (upper bound),Mean (shifted),93.3,88.3,85.0,75.0,85.4

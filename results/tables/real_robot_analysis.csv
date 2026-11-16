@@ -1,0 +1,8 @@
+block,method,Camera,Base,Both,Avg
+Gauges,Base gauge,55,25,20,33.3
+Gauges,Camera gauge,30,65,35,43.3
+Gauges,WACO,77.5,72.5,67.5,72.5
+Few-shot (10 demos),B1,45,25,15,28.3
+Few-shot (10 demos),WACO,72.5,67.5,62.5,67.5
+Occluded,WACO w/o gate,-,40,-,-
+Occluded,WACO,-,72.5,-,-

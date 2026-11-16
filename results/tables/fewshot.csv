@@ -1,0 +1,5 @@
+method,10 demos,20 demos,50 demos
+B1 (standard recipe),63.2,66.6,74.0
+B1 + WACO runtime,73.3,76.3,81.4
+W1 (error-aware training only),71.7,73.3,81.1
+WACO (W1 + runtime),82.4,82.3,87.2

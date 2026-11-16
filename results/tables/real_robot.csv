@@ -1,0 +1,6 @@
+method,Nominal,Camera,Base,Both,Avg (shifted)
+pi0.5 (B1),92.5,60.0,40.0,30.0,43.3
+B1 + 2D aug,93.8,72.5,42.5,32.5,49.2
+WACO runtime on B1,91.3,75.0,72.5,62.5,70.0
+WACO (W1 + runtime),95.0,85.0,80.0,75.0,80.0
+GT oracle on W1 (upper bound),95.0,87.5,86.3,82.5,85.4

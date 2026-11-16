@@ -1,0 +1,7 @@
+method,Spatial,LIBERO-10,Mean
+B1,79.6,68.4,74.0
+B1 + 2D aug,83.6,71.4,77.5
+B2,88.4,73.7,81.1
+WACO runtime on B1,88.4,74.4,81.4
+WACO,90.6,83.8,87.2
+GT oracle on W1,91.0,86.3,88.7

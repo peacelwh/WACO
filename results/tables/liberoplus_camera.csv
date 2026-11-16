@@ -1,0 +1,4 @@
+method,perturbed data,released (seed 0 / 3-seed mean),corrected (seed 0 / 3-seed mean)
+pi0.5 public checkpoint,-,62.5,63.8
++ WACO runtime (no training),-,89.4 / 88.0,88.1 / 87.7
+WACO (error-aware fine-tuning + runtime),-,93.7 / 92.4,93.7 / 92.0

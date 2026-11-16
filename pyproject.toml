@@ -1,0 +1,32 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "poseshift"
+version = "1.0.0"
+description = "WACO: world-anchored canonicalization for pose-robust few-shot VLA models, and the LIBERO-PoseShift benchmark"
+readme = "README.md"
+requires-python = ">=3.12"
+license = { text = "Apache-2.0" }
+authors = [{ name = "Wenhao Li" }]
+dependencies = ["numpy", "scipy", "opencv-python-headless"]
+
+[project.optional-dependencies]
+# simulation, training and evaluation run on LeRobot
+lerobot = ["lerobot[pi,libero]==0.6.1"]
+test = ["pytest"]
+
+[project.urls]
+Homepage = "https://peacelwh.github.io/WACO/"
+Repository = "https://github.com/peacelwh/WACO"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
+
+[tool.ruff]
+line-length = 125
