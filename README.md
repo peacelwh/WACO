@@ -9,7 +9,6 @@
 <sup>1</sup>Shandong University &nbsp; <sup>2</sup>Shenzhen Loop Area Institute &nbsp; <sup>3</sup>Harbin Institute of Technology, Shenzhen &nbsp; <sup>4</sup>Xidian University &nbsp; <sup>5</sup>Fudan University
 
 [![Project Page](https://img.shields.io/badge/Project-Page-2f6fde?logo=googlechrome&logoColor=white)](https://peacelwh.github.io/WACO/)
-[![Paper](https://img.shields.io/badge/Paper-PDF-b31b1b?logo=adobeacrobatreader&logoColor=white)](https://peacelwh.github.io/WACO/static/pdf/WACO.pdf)
 [![Model](https://img.shields.io/badge/%F0%9F%A4%97%20Model-WACO--pi05--LIBERO-ffcc4d)](https://huggingface.co/Bluexxx/WACO-pi05-LIBERO)
 [![Dataset](https://img.shields.io/badge/%F0%9F%A4%97%20Dataset-LIBERO--PoseShift-ffcc4d)](https://huggingface.co/datasets/Bluexxx/LIBERO-PoseShift)
 [![License](https://img.shields.io/badge/License-Apache%202.0-green)](LICENSE)
