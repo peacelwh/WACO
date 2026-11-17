@@ -4,9 +4,9 @@
 
 **WACO: World-Anchored Canonicalization** &nbsp;·&nbsp; **LIBERO-PoseShift benchmark**
 
-[Wenhao Li](https://github.com/peacelwh)<sup>1,2</sup>, Xuening Zhang<sup>3</sup>, Yuhao Wei<sup>4,2</sup>, Zhongyi Han<sup>1</sup>, Pu Wang<sup>1,2</sup>, Yuze Wang<sup>3,2</sup>, Jingkai Wang<sup>5</sup>, Yilong Yin<sup>1</sup>
+[Wenhao Li](https://github.com/peacelwh)<sup>1,2</sup>, Zhongyi Han<sup>1</sup>, Yuhao Wei<sup>4,2</sup>, Liang Han<sup>3</sup>, Yilong Yin<sup>1</sup>, Liqiang Nie<sup>3</sup>
 
-<sup>1</sup>Shandong University &nbsp; <sup>2</sup>Shenzhen Loop Area Institute &nbsp; <sup>3</sup>Harbin Institute of Technology, Shenzhen &nbsp; <sup>4</sup>Xidian University &nbsp; <sup>5</sup>Fudan University
+<sup>1</sup>Shandong University &nbsp; <sup>2</sup>Shenzhen Loop Area Institute &nbsp; <sup>3</sup>Harbin Institute of Technology, Shenzhen &nbsp; <sup>4</sup>Xidian University
 
 [![Project Page](https://img.shields.io/badge/Project-Page-2f6fde?logo=googlechrome&logoColor=white)](https://peacelwh.github.io/WACO/)
 [![Model](https://img.shields.io/badge/%F0%9F%A4%97%20Model-WACO--pi05--LIBERO-ffcc4d)](https://huggingface.co/Bluexxx/WACO-pi05-LIBERO)
@@ -201,7 +201,7 @@ All numbers are success rates in % as reported in the paper; every table is in [
 ```bibtex
 @article{li2026waco,
   title   = {Towards Pose-Robust Few-Shot Vision-Language-Action Models},
-  author  = {Li, Wenhao and Zhang, Xuening and Wei, Yuhao and Han, Zhongyi and Wang, Pu and Wang, Yuze and Wang, Jingkai and Yin, Yilong},
+  author  = {Li, Wenhao and Han, Zhongyi and Wei, Yuhao and Han, Liang and Yin, Yilong and Nie, Liqiang},
   journal = {arXiv preprint},
   year    = {2026}
 }
