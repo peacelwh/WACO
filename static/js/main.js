@@ -45,9 +45,25 @@
   }, { threshold: 0.15 }) : null;
   function watch(v) { if (vio) vio.observe(v); }
 
-  /* ---------------- hero demo ---------------- */
+  /* ---------------- hero: overview video, then the real-robot demo ---------------- */
   var demoA = $('#demoA'), demoB = $('#demoB');
+  var film = $('#demoFilm'), pair = $('#demoPair'), ov = $('#overviewVideo'), chip = $('#demoChip');
+  var filmChip = chip.textContent;
+  ov.addEventListener('loadedmetadata', function () {
+    if (!isFinite(ov.duration)) return;
+    var s = Math.round(ov.duration);
+    filmChip = Math.floor(s / 60) + ' min ' + (s % 60) + ' s · with sound';
+    if (!film.hidden) chip.textContent = filmChip;
+  });
+  ov.addEventListener('play', function () { film.classList.add('started'); });
+  $('#filmPlay').addEventListener('click', function () { var p = ov.play(); if (p && p.catch) p.catch(function () {}); });
   function setDemo(task) {
+    var isFilm = task === 'overview';
+    film.hidden = !isFilm; pair.hidden = isFilm;
+    $('#demoRestart').hidden = isFilm;
+    chip.textContent = isFilm ? filmChip : '3× speed';
+    if (isFilm) { demoA.pause(); demoB.pause(); return; }
+    ov.pause();
     demoA.poster = 'static/videos/real/' + task + '_nominal.jpg'; demoA.src = 'static/videos/real/' + task + '_nominal.mp4';
     demoB.poster = 'static/videos/real/' + task + '_base.jpg'; demoB.src = 'static/videos/real/' + task + '_base.mp4';
     [demoA, demoB].forEach(function (v) { var p = v.play(); if (p && p.catch) p.catch(function () {}); });
