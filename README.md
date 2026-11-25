@@ -8,6 +8,7 @@
 
 <sup>1</sup>Shandong University &nbsp; <sup>2</sup>Shenzhen Loop Area Institute &nbsp; <sup>3</sup>Harbin Institute of Technology, Shenzhen &nbsp; <sup>4</sup>Xidian University
 
+[![arXiv](https://img.shields.io/badge/arXiv-2611.24360-b31b1b?logo=arxiv&logoColor=white)](https://arxiv.org/abs/2611.24360)
 [![Project Page](https://img.shields.io/badge/Project-Page-2f6fde?logo=googlechrome&logoColor=white)](https://peacelwh.github.io/WACO/)
 [![Model](https://img.shields.io/badge/%F0%9F%A4%97%20Model-WACO--pi05--LIBERO-ffcc4d)](https://huggingface.co/Bluexxx/WACO-pi05-LIBERO)
 [![Dataset](https://img.shields.io/badge/%F0%9F%A4%97%20Dataset-LIBERO--PoseShift-ffcc4d)](https://huggingface.co/datasets/Bluexxx/LIBERO-PoseShift)
@@ -202,7 +203,7 @@ All numbers are success rates in % as reported in the paper; every table is in [
 @article{li2026waco,
   title   = {Towards Pose-Robust Few-Shot Vision-Language-Action Models},
   author  = {Li, Wenhao and Han, Zhongyi and Wei, Yuhao and Han, Liang and Yin, Yilong and Nie, Liqiang},
-  journal = {arXiv preprint},
+  journal = {arXiv preprint arXiv:2611.24360},
   year    = {2026}
 }
 ```
